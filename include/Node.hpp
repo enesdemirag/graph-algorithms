@@ -13,6 +13,6 @@ public:
 private:
     char key;
     int value;
-    Node* parent;
+    Node* parent = nullptr;
     std::list<Node*> children;
 };

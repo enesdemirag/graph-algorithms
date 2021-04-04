@@ -16,14 +16,17 @@ void addNewLayer(Node* parent, std::list<char> keys)
 
 std::list<int> findSolution(Node* node)
 {
-    std::list<int> selected_keys;
+    std::list<char> selected_keys;
     std::list<int> selected_values;
 
+    selected_keys.push_back(node->getKey());
+    selected_values.push_back(node->getValue());
+
     Node* parent_node = node->getParent();
-    while (nullptr != parent_node)
+    while (nullptr != parent_node->getParent())
     {
-        selected_keys.push_back(node->getParent()->getKey());
-        selected_values.push_back(node->getParent()->getValue());
+        selected_keys.push_back(parent_node->getKey());
+        selected_values.push_back(parent_node->getValue());
         parent_node = parent_node->getParent();
     }
 

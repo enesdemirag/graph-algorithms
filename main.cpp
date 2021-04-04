@@ -14,12 +14,13 @@ int main(int argc, char** argv)
 
     std::list<int> solution = BFS(&root, unique_keys, str1, str2, sum);
 
-    if (std::list<int>() == solution)
+    if (solution.empty())
     {
         std::cout << "No possible solution found." << std::endl;
     }
     else
     {
+        std::cout << "YES" << std::endl;
         //printResult(unique_keys, solution);
         //writeResult(unique_keys, solution);
     }
