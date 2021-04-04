@@ -36,7 +36,7 @@ std::list<int> findSolution(Node *node) {
     return selected_values;
 }
 
-int string2int(std::string& input_str, std::list<char>& keys, std::list<int>& values)
+int string2int(std::string input_str, const std::list<char>& keys, const std::list<int>& values)
 {
     int number = 0;
     int digit_count = 0;
@@ -45,11 +45,11 @@ int string2int(std::string& input_str, std::list<char>& keys, std::list<int>& va
     std::vector<char> k;
     std::vector<int> v;
 
-    for (char x : keys)
+    for (auto x : keys)
     {
         k.push_back(x);
     }
-    for (int x : values)
+    for (auto x : values)
     {
         v.push_back(x);
     }
@@ -62,7 +62,7 @@ int string2int(std::string& input_str, std::list<char>& keys, std::list<int>& va
     return number;
 }
 
-bool checkSolution(std::list<char>& keys, std::list<int>& values, std::string str1, std::string str2, std::string sum)
+bool checkSolution(const std::list<char>& keys, const std::list<int>& values, std::string& str1, std::string& str2, std::string& sum)
 {
     int number1 = string2int(str1, keys, values);
     int number2 = string2int(str2, keys, values);
