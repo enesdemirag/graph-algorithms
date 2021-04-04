@@ -1,4 +1,5 @@
 #include "../include/Node.hpp"
+#include <string>
 
 Node::Node(char _key, int _value)
 {
@@ -39,4 +40,38 @@ Node* Node::getParent()
 std::list<Node*> Node::getChildren()
 {
     return this->children;
+}
+
+bool checkZeroCondition(char& key, std::list<char>& first_chars)
+{
+    for (char c : first_chars)
+    {
+        if (key == c)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void addNewLayer(Node* parent, std::list<char> keys, std::list<char>& first_chars)
+{
+    if (keys.empty()) return;
+
+    possible_values = std::list<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+    char letter = keys.front();
+    if (!checkZeroCondition(letter, first_chars))
+    {
+        possible_values.pop_front();
+    }
+
+    parent->addChildren(letter, possible_values);
+
+    keys.pop_front();
+
+    for (Node* child : parent->getChildren())
+    {
+        addNewLayer(child, keys, first_chars);
+    }
 }

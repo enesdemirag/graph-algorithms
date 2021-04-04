@@ -1,20 +1,6 @@
 #include <vector>
 #include "../include/Utils.hpp"
 
-void addNewLayer(Node* parent, std::list<char> keys)
-{
-    if (keys.empty()) return;
-    
-    parent->addChildren(keys.front(), std::list<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-
-    keys.pop_front();
-
-    for (Node* child : parent->getChildren())
-    {
-        addNewLayer(child, keys);
-    }
-}
-
 std::list<int> findSolution(Node *node) {
     std::list<char> selected_keys;
     std::list<int> selected_values;

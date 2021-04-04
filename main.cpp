@@ -12,8 +12,9 @@ int main(int argc, char** argv)
     std::string sum = "FOUR";
 
     std::list<char> unique_keys {'T', 'W', 'O', 'F', 'U', 'R'};
+    std::list<char> first_chars {'T', 'F'};
 
-    addNewLayer(&root, unique_keys);
+    addNewLayer(&root, unique_keys, first_chars);
 
     int number_of_visited_nodes, max_nodes_in_memory;
     double running_time;

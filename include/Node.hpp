@@ -16,3 +16,6 @@ private:
     Node* parent = nullptr;
     std::list<Node*> children;
 };
+
+bool checkZeroCondition(char& key, std::list<char>& first_chars);
+void addNewLayer(Node* parent, std::list<char> keys, std::list<char>& first_chars);
