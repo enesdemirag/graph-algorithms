@@ -58,7 +58,7 @@ void addNewLayer(Node* parent, std::list<char> keys, std::list<char>& first_char
 {
     if (keys.empty()) return;
 
-    possible_values = std::list<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::list<int> possible_values {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     char letter = keys.front();
     if (!checkZeroCondition(letter, first_chars))

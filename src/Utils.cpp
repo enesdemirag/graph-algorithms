@@ -50,6 +50,15 @@ int string2int(std::string input_str, const std::list<char>& keys, const std::li
 
 bool checkSolution(const std::list<char>& keys, const std::list<int>& values, std::string& str1, std::string& str2, std::string& sum)
 {
+    std::list<int> unique_values(values);
+    unique_values.sort();
+    unique_values.unique();
+
+    if (unique_values.size() != values.size())
+    {
+        return false;
+    }
+
     int number1 = string2int(str1, keys, values);
     int number2 = string2int(str2, keys, values);
     int total = string2int(sum, keys, values);
