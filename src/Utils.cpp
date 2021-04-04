@@ -76,30 +76,7 @@ bool checkSolution(const std::list<char>& keys, const std::list<int>& values, st
     return number1 + number2 == total;
 }
 
-std::list<int> BFS(Node* start_node, std::list<char>& keys, std::string& str1, std::string& str2, std::string& sum)
+int getSystemTime()
 {
-    std::list<Node*> queue;
-    queue.push_back(start_node);
-
-    while (!queue.empty())
-    {
-        Node* node = queue.front();
-        queue.pop_front();
-        
-        if (node->getChildren().empty())
-        {
-            std::list<int> solution = findSolution(node);
-            if (checkSolution(keys, solution, str1, str2, sum))
-            {
-                return solution;
-            }
-        }
-
-        for (Node* child : node->getChildren())
-        {
-            queue.push_back(child);
-        }
-    }
-    
-    return std::list<int>();
+    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }

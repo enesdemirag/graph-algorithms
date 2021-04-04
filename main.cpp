@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "include/Node.hpp"
 #include "include/Utils.hpp"
+#include "include/Search.hpp"
 
 int main(int argc, char** argv)
 {
@@ -14,7 +15,10 @@ int main(int argc, char** argv)
 
     addNewLayer(&root, unique_keys);
 
-    std::list<int> solution = BFS(&root, unique_keys, str1, str2, sum);
+    int number_of_visited_nodes, max_nodes_in_memory;
+    double running_time;
+
+    std::list<int> solution = BFS(&root, unique_keys, str1, str2, sum, number_of_visited_nodes, max_nodes_in_memory, running_time);
 
     if (solution.empty())
     {
@@ -22,8 +26,29 @@ int main(int argc, char** argv)
     }
     else
     {
-        std::cout << "YES" << std::endl;
-        //printResult(unique_keys, solution);
-        //writeResult(unique_keys, solution);
+        std::cout << "BFS" << std::endl;
+
+        for (int value : solution)
+        {
+            std::cout << value << std::endl;
+        }
     }
+
+    std::list<int> solution1 = DFS(&root, unique_keys, str1, str2, sum, number_of_visited_nodes, max_nodes_in_memory, running_time);
+
+    if (solution1.empty())
+    {
+        std::cout << "No possible solution found." << std::endl;
+    }
+    else
+    {
+        std::cout << "DFS" << std::endl;
+
+        for (int value : solution1)
+        {
+            std::cout << value << std::endl;
+        }
+    }
+
+    return 0;
 }
