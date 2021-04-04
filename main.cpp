@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "include/Node.hpp"
 #include "include/Utils.hpp"
 
@@ -5,10 +6,11 @@ int main(int argc, char** argv)
 {
     Node root(' ', -1);
 
+    std::string str1 = "TWO";
+    std::string str2 = "TWO";
+    std::string sum = "FOUR";
+
     std::list<char> unique_keys {'T', 'W', 'O', 'F', 'U', 'R'};
-    const char* str1 = "TWO";
-    const char* str2 = "TWO";
-    const char* sum = "FOUR";
 
     addNewLayer(&root, unique_keys);
 
@@ -24,6 +26,4 @@ int main(int argc, char** argv)
         //printResult(unique_keys, solution);
         //writeResult(unique_keys, solution);
     }
-
-    return 0;
 }

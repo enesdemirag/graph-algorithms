@@ -1,8 +1,9 @@
+#include <vector>
 #include "../include/Utils.hpp"
 
 void addNewLayer(Node* parent, std::list<char> keys)
 {
-    if (0 == keys.size()) return; 
+    if (keys.empty()) return;
     
     parent->addChildren(keys.front(), std::list<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
 
@@ -14,8 +15,7 @@ void addNewLayer(Node* parent, std::list<char> keys)
     }
 }
 
-std::list<int> findSolution(Node* node)
-{
+std::list<int> findSolution(Node *node) {
     std::list<char> selected_keys;
     std::list<int> selected_values;
 
@@ -36,22 +36,57 @@ std::list<int> findSolution(Node* node)
     return selected_values;
 }
 
-bool checkSolution(std::list<char> keys, std::list<int> values, const char* str1, const char* str2, const char* sum)
+int string2int(std::string& input_str, std::list<char>& keys, std::list<int>& values)
 {
-    return true;
+    int number = 0;
+    int digit_count = 0;
+    std::reverse(input_str.begin(), input_str.end());
+
+    std::vector<char> k;
+    std::vector<int> v;
+
+    for (char x : keys)
+    {
+        k.push_back(x);
+    }
+    for (int x : values)
+    {
+        v.push_back(x);
+    }
+
+    for (char c : input_str)
+    {
+        number += v.at(std::find(k.begin(), k.end(), c) - k.begin()) * std::pow(10, digit_count++);
+    }
+
+    return number;
 }
 
-std::list<int> BFS(Node* start_node, std::list<char> keys, const char* str1, const char* str2, const char* sum)
+bool checkSolution(std::list<char>& keys, std::list<int>& values, std::string str1, std::string str2, std::string sum)
+{
+    int number1 = string2int(str1, keys, values);
+    int number2 = string2int(str2, keys, values);
+    int total = string2int(sum, keys, values);
+
+    if (0 == number1 || 0 == number2 || 0 == total)
+    {
+        return false;
+    }
+
+    return number1 + number2 == total;
+}
+
+std::list<int> BFS(Node* start_node, std::list<char>& keys, std::string& str1, std::string& str2, std::string& sum)
 {
     std::list<Node*> queue;
     queue.push_back(start_node);
 
-    while (0 != queue.size())
+    while (!queue.empty())
     {
         Node* node = queue.front();
         queue.pop_front();
         
-        if (0 == node->getChildren().size())
+        if (node->getChildren().empty())
         {
             std::list<int> solution = findSolution(node);
             if (checkSolution(keys, solution, str1, str2, sum))

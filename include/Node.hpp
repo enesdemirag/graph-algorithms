@@ -6,8 +6,8 @@ public:
     Node(char _key, int _value);
     void addChildren(char child_key, std::list<int> values);
     void setParent(Node* parent_node);
-    char getKey();
-    int getValue();
+    char getKey() const;
+    int getValue() const;
     Node* getParent();
     std::list<Node*> getChildren();
 private:

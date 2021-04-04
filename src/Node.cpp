@@ -21,12 +21,12 @@ void Node::setParent(Node* parent_node)
     this->parent = parent_node;
 }
 
-char Node::getKey()
+char Node::getKey() const
 {
     return this->key;
 }
 
-int Node::getValue()
+int Node::getValue() const
 {
     return this->value;
 }
