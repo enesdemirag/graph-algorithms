@@ -1,4 +1,4 @@
-#include "../include/Search.hpp"
+#include "Search.hpp"
 
 std::list<int> BFS(Node* start_node, std::list<char>& keys, std::string& str1, std::string& str2, std::string& sum, int& visited_nodes, int& max_nodes_in_memory, double& time)
 {

@@ -1,7 +1,6 @@
-#include <vector>
-#include "../include/Utils.hpp"
+#include "Utils.hpp"
 
-std::list<int> findSolution(Node *node) {
+std::list<int> findSolution(Node* node) {
     std::list<char> selected_keys;
     std::list<int> selected_values;
 
@@ -74,4 +73,57 @@ bool checkSolution(const std::list<char>& keys, const std::list<int>& values, st
 int getSystemTime()
 {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+}
+
+void printResults(std::string algorithm, std::list<char> keys, std::list<int> values, int number_of_visited_nodes, int max_nodes_in_memory, double running_time)
+{
+    std::cout << "Algorithm: " << algorithm << std::endl;
+    std::cout << "Number of the visited nodes: " << number_of_visited_nodes << std::endl;
+    std::cout << "Maximum number of nodes kept in the memory: " << max_nodes_in_memory << std::endl;
+    std::cout << "Running time: " << running_time << " seconds" <<std::endl;
+    std::cout << "Solution: ";
+
+    while (!keys.empty() || !values.empty())
+    {
+        std::cout << keys.front() << ": " << values.front();
+        if (1 != values.size()) { std::cout << ", "; };
+
+        keys.pop_front();
+        values.pop_front();
+    }
+}
+
+void printMatrix(std::string out_file, std::list<char> keys, std::list<int> values)
+{
+    FILE* pFile = fopen("solution.txt", "w");
+
+    // First line
+    for (int i = 0; i < 9; i++)
+    {
+        fprintf(pFile, "\t%d", i);
+    }
+    fprintf(pFile, "\t9\n");
+
+    while (!keys.empty())
+    {
+        fprintf(pFile, "%c\t", keys.front());
+
+        for (int n = 0; n < 10; n++)
+        {
+            if (values.front() == n)
+            {
+                fprintf(pFile, "1\t");
+            }
+            else
+            {
+                fprintf(pFile, ".\t");
+            }
+        }
+
+        keys.pop_front();
+        values.pop_front();
+        fprintf(pFile, "\n");
+    }
+
+    fclose(pFile);
 }
