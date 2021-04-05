@@ -91,11 +91,12 @@ void printResults(std::string algorithm, std::list<char> keys, std::list<int> va
         keys.pop_front();
         values.pop_front();
     }
+    std::cout << "\n";
 }
 
 void printMatrix(std::string out_file, std::list<char> keys, std::list<int> values)
 {
-    FILE* pFile = fopen("solution.txt", "w");
+    FILE* pFile = fopen(out_file.c_str(), "w");
 
     // First line
     for (int i = 0; i < 9; i++)
