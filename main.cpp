@@ -4,6 +4,11 @@
 
 int main(int argc, char** argv)
 {
+    if (!checkArguments(argv))
+    {
+        return -1;
+    }
+
     Node root(' ', -1);
 
     std::string str1 = argv[2];
@@ -38,6 +43,10 @@ int main(int argc, char** argv)
             printResults("BFS", unique_keys, solution, number_of_visited_nodes, max_nodes_in_memory, running_time);
             printMatrix(argv[5], unique_keys, solution);
         }
+        else
+        {
+            std::cout << "No solution found." << std::endl;
+        }
     }
     else
     {
@@ -46,6 +55,10 @@ int main(int argc, char** argv)
         {
             printResults("DFS", unique_keys, solution, number_of_visited_nodes, max_nodes_in_memory, running_time);
             printMatrix(argv[5], unique_keys, solution);
+        }
+        else
+        {
+            std::cout << "No solution found." << std::endl;
         }
     }
 

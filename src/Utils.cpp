@@ -1,6 +1,7 @@
 #include "Utils.hpp"
 
-std::list<int> findSolution(Node* node) {
+std::list<int> findSolution(Node* node)
+{
     std::list<char> selected_keys;
     std::list<int> selected_values;
 
@@ -127,4 +128,31 @@ void printMatrix(std::string out_file, std::list<char> keys, std::list<int> valu
     }
 
     fclose(pFile);
+}
+
+bool checkArguments(char** argv)
+{
+    try
+    {
+        if (nullptr == argv[1] ||
+            nullptr == argv[2] ||
+            nullptr == argv[3] ||
+            nullptr == argv[4] ||
+            nullptr == argv[5])
+        {
+            std::cout << "Missing argument." << std::endl;
+            return false;
+        }
+        if (!(std::string("BFS") == argv[1] || std::string("DFS") == argv[1]))
+        {
+            std::cout << "Invalid algorithm." << std::endl;
+            return false;
+        }
+    }
+    catch(std::exception& ex)
+    {
+        std::cout << "Invalid argument." << std::endl;
+        return false;
+    }
+    return true;
 }
