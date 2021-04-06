@@ -151,7 +151,7 @@ bool checkArguments(char** argv)
     }
     catch(std::exception& ex)
     {
-        std::cout << "Invalid argument." << std::endl;
+        std::cout << "Invalid argument: " << ex.what() << std::endl;
         return false;
     }
     return true;
