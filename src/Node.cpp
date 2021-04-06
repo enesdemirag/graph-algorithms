@@ -1,5 +1,9 @@
 #include "Node.hpp"
 
+/* Constructor of the Node class.
+ * @param _key Letter.
+ * @param _value Number.
+ */
 Node::Node(char _key, int _value)
 {
     // Set the key and value of the node.
@@ -7,6 +11,11 @@ Node::Node(char _key, int _value)
     this->value = _value;
 }
 
+/* With this function, any node can create multiple children nodes under it
+ * and connects them with itself.
+ * @param child_key Letter of the child nodes.
+ * @param values Numeric values for each child node.
+ */
 void Node::addChildren(char child_key, std::list<int> values)
 {
     // For every value in values list, create a new child node.
@@ -21,31 +30,42 @@ void Node::addChildren(char child_key, std::list<int> values)
     }
 }
 
+// @param Parent node of the node to be set.
 void Node::setParent(Node* parent_node)
 {
     this->parent = parent_node;
 }
 
+// @return The key/letter of the node.
 char Node::getKey() const
 {
     return this->key;
 }
 
+// @return The value/number of the node.
 int Node::getValue() const
 {
     return this->value;
 }
 
+// @return Parent of the node.
 Node* Node::getParent()
 {
     return this->parent;
 }
 
+// @return List of child nodes of the node.
 std::list<Node*> Node::getChildren()
 {
     return this->children;
 }
 
+/* This functions check if given letter is the first letter of the given words.
+ * We need this constrain to not create extra nodes inside tree which cannot take 0 value.
+ * @param key Letter.
+ * @param first_chars List of first letters of the words.
+ * @return False if key is inside first_chars, otherwise true.
+ */
 bool checkZeroCondition(char& key, std::list<char>& first_chars)
 {
     // For every first letter, check if the key is one of them.
@@ -60,6 +80,11 @@ bool checkZeroCondition(char& key, std::list<char>& first_chars)
     return true;
 }
 
+/* This is the function which creates a tree. It takes a node and creates every possible branch under it recursively.
+ * @param parent Root of the tree to be created.
+ * @param keys Each unique letter. Size of this list is the depth of our tree.
+ * @param keys first_chars List of letters which cannot take 0 value because they are the left-most digit.
+ */
 void addNewLayer(Node* parent, std::list<char> keys, std::list<char>& first_chars)
 {
     // This is the stop condition of the recursive call.
@@ -100,6 +125,7 @@ void addNewLayer(Node* parent, std::list<char> keys, std::list<char>& first_char
     // Because for every recursion, we want to give a new keys list with one less element.
     for (Node* child : parent->getChildren())
     {
+        // Recursive call
         addNewLayer(child, keys, first_chars);
     }
 }

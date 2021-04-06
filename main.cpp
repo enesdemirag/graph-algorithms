@@ -1,7 +1,48 @@
+/* @Author
+
+Student Name: Enes Demirag
+Student ID  : 504201571
+Mail        : ensdmrg@gmail.com
+Date		: 06.04.2021
+
+
+Dear sir/madam,
+
+This projects consist of a Node class, two graph traverse algorithms (BFS and DFS) and other utility functions.
+In order to compile and run this project, first you need to link files under include/ directory.
+Below commands can be used to build and run this project with g++.
+
+>> g++ -std=c++11 -Iinclude -c src/*
+>> g++ -std=c++11 -Iinclude -g *.o -o executable main.cpp
+>> ./executable DFS TWO TWO FOUR solution.txt
+
+All of the standard libraries used in this project is given below.
+
+<list>      : To implement a FIFO type Queue structure.
+<stack>     : To implement a LIFO type Stack structure.
+<string>    : String operations.
+<vector>    : Storing some elements and accessing them.
+<iostream>  : To print things to the terminal.
+<algorithm> : To find element positions inside lists and vectors.
+<cmath>     : Numaric operations like power and max.
+<chrono>    : To calculate running time.
+
+If you encounter any problem regarding this projects, feel free to reach me.
+
+Thanks and kind regards,
+Enes
+*/
+
 #include "Node.hpp"
 #include "Utils.hpp"
 #include "Search.hpp"
 
+
+/* This is the main function.
+ * It takes arguments from program call and using those,
+ * First creates a tree.
+ * Then search a valid solution in that tree using specified algorithm.
+ */
 int main(int argc, char** argv)
 {
     // Checking if there is an unexpected input argument

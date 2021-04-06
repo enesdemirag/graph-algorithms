@@ -1,5 +1,11 @@
 #include "Utils.hpp"
 
+/* This function takes a node (a leaf node in our case)
+ * and iteratively looks its parents up to the root node of the tree
+ * and puts every value it came across into a list.
+ * @param node A leaf node in a tree.
+ * @return List of all the values from root node to the input node.
+ */
 std::list<int> findSolution(Node* node)
 {
     // Create empty lists for letters and their values'.
@@ -31,6 +37,12 @@ std::list<int> findSolution(Node* node)
     return selected_values;
 }
 
+/* This function maps a string to a number using key, value pairs.
+ * @param input_str Input string.
+ * @param keys List of unique keys.
+ * @param values List of corresponding integer values of keys.
+ * @return Integer value of input string.
+ */
 int string2int(std::string input_str, const std::list<char>& keys, const std::list<int>& values)
 {
     // Initialize the number with 0 value.
@@ -62,6 +74,15 @@ int string2int(std::string input_str, const std::list<char>& keys, const std::li
     return number;
 }
 
+/* This function checks if the sum of first two input strings equals to the other input string.
+ * It first maps strings into integers using string2int() function, then checks the result.
+ * @param keys List of unique keys.
+ * @param values List of corresponding integer values of keys.
+ * @param str1 Input string 1
+ * @param str2 Input string 2
+ * @param sum Input string 3
+ * @return True if using the given key-value pairs the sum operation holds, otherwise false.
+ */
 bool checkSolution(const std::list<char>& keys, const std::list<int>& values, std::string& str1, std::string& str2, std::string& sum)
 {
     // It is not possible to any two of the elements of values list can be same
@@ -94,12 +115,23 @@ bool checkSolution(const std::list<char>& keys, const std::list<int>& values, st
     return number1 + number2 == total;
 }
 
+/* This function returns a timestamp in milliseconds.
+ * @return A timestamp in milliseconds.
+ */
 int getSystemTime()
 {
     // Using chrono library, get a timestamp in milliseconds.
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
+/* This function prints all required results to the terminal.
+ * @param algorithm Used algorithm.
+ * @param keys List of unique letters.
+ * @param values List of corresponding integers.
+ * @param number_of_visited_nodes Number of visited nodes in tree before finding a valid solution.
+ * @param max_nodes_in_memory Maximum number of nodes in queue/stack in all search process.
+ * @param running_time Total time of the search process.
+ */
 void printResults(const char* algorithm, std::list<char> keys, std::list<int> values, int number_of_visited_nodes, int max_nodes_in_memory, double running_time)
 {
     // Print results to terminal.
@@ -120,10 +152,15 @@ void printResults(const char* algorithm, std::list<char> keys, std::list<int> va
     std::cout << "\n";
 }
 
+/* This function creates a file and writes the matrix of letter-number pairs.
+ * @param out_file Name of the output file.
+ * @param keys List of letters.
+ * @param values List of corresponding integers.
+ */
 void printMatrix(const char* out_file, std::list<char> keys, std::list<int> values)
 {
     // Create a file with write flag.
-    FILE* pFile = fopen(out_file.c_str(), "w");
+    FILE* pFile = fopen(out_file, "w");
 
     // First line if the numbers from 0 to 9.
     for (int i = 0; i < 9; i++)
@@ -162,6 +199,10 @@ void printMatrix(const char* out_file, std::list<char> keys, std::list<int> valu
     fclose(pFile);
 }
 
+/* This function used before anything to be sure that there is no problem in input arguments.
+ * @param argv Input arguments.
+ * @return True if there is no problem, otherwise false.
+ */
 bool checkArguments(char** argv)
 {
     // Try to read arguments
