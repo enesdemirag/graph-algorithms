@@ -24,8 +24,8 @@ All of the standard libraries used in this project is given below.
 <string>    : String operations.
 <vector>    : Storing some elements and accessing them.
 <iostream>  : To print things to the terminal.
-<algorithm> : To find element positions inside lists and vectors.
-<cmath>     : Numaric operations like power and max.
+<algorithm> : To find element positions inside lists and vectors and sort them.
+<cmath>     : Numeric operations like power and max.
 <chrono>    : To calculate running time.
 ```
 
