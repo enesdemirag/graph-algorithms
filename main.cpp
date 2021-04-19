@@ -2,201 +2,196 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <utility>
-#include <set>
-#include <map>
 #include <vector>
 #include <algorithm>
-#include <tuple>
+#include <map>
+#include <set>
 
-using namespace std;
+typedef std::string Node;
 
-class Graph {
-
-    typedef pair<string, string> Edge; // calling Edge
-    typedef pair<int, Edge> WEdge; // Weighted edge
-
-
-
-private:
-    set<string> nodes; // Keep track of unique Nodes in graph
-    vector<WEdge> graph;
-    map<string, string> disjoint; // map for disjoints
-
-    const string& add_node(string node) {
-        pair<set<string>::iterator,bool> insert_ret;
-        insert_ret = nodes.insert(node);
-
-        const string& retVal = *insert_ret.first;
-
-        disjoint.insert(pair<string, string>(node, node));
-
-        return retVal;
-    }
-
-    string& mst_find(string& index) {
-        if (index != disjoint[index]) {
-            disjoint[index] = mst_find(disjoint[index]);
-        }
-
-        return disjoint[index];
-    }
-
-public:
-    void add_edge(string start, string end, int weight) {
-        (void) add_node(start);
-        (void) add_node(end);
-
-        graph.push_back(WEdge(weight, Edge(start, end)));
-    }
-
-    int mst() {
-        int total_w = 0;
-
-        sort(graph.begin(), graph.end());
-        vector<tuple<int, string, string>> out;
-
-        vector<WEdge>::iterator it;
-        for (it = graph.begin(); it != graph.end(); ++it) {
-            string start = it->second.first;
-            string end = it->second.second;
-
-            string& set_start = mst_find(start);
-            string& set_end = mst_find(end);
-
-            if (start == "GP" && end.substr(0, 2) == "Ch")
-            {
-                set_start = mst_find(set_start);
-                set_end = mst_find(set_end);
-                disjoint[set_end] = set_start;
-
-                out.push_back(make_tuple(it->first, start, end));
-                total_w += it->first;
-                break;
-            }
-
-        }
-
-        for (it = graph.begin(); it != graph.end(); ++it) {
-            string start = it->second.first;
-            string end = it->second.second;
-
-            string& set_start = mst_find(start);
-            string& set_end = mst_find(end);
-
-            if (start == "GP" && end == "Hipp")
-            {
-                set_start = mst_find(set_start);
-                set_end = mst_find(set_end);
-                disjoint[set_end] = set_start;
-
-                out.push_back(make_tuple(it->first, start, end));
-                total_w += it->first;
-                break;
-            }
-
-        }
-
-
-        for (it = graph.begin(); it != graph.end(); ++it) {
-            string start = it->second.first;
-            string end = it->second.second;
-
-            string& set_start = mst_find(start);
-            string& set_end = mst_find(end);
-
-            if(start == "Hipp" && end.substr(0,3) == "Bas")
-            {
-                continue;
-            }
-
-            if( end == "Hipp" && start.substr(0,3) == "Bas")
-            {
-                continue;
-            }
-
-            if( end.substr(0, 2) == "Hp" && start.substr(0, 2) == "Hp")
-            {
-                continue;
-            }
-
-
-            if (set_start != set_end) {
-                //cout << start << " " << end  << " " << it->first<< endl;
-                out.push_back(make_tuple(it->first, start, end));
-                total_w += it->first;
-
-                set_start = mst_find(set_start);
-                set_end = mst_find(set_end);
-                disjoint[set_end] = set_start;
-
-            }
-
-        }
-        sort(out.begin(), out.end());
-        for (tuple<int, string, string> t : out)
-        {
-            cout << get<1>(t) << " " << get<2>(t)  << " " << get<0>(t) << endl;
-        }
-
-        cout << total_w << endl;
-
-        return 0;
-    }
-
-    // Print out graph edges with weights
-    friend ostream& operator << (ostream& outs, Graph& graph) {
-        typename vector<WEdge>::iterator it;
-
-        for (it = graph.graph.begin(); it != graph.graph.end(); ++it) {
-            outs << it->second.first << " --" << it->first << "-- " << it->second.second << endl;
-        }
-
-        return outs;
-    }
+struct Connection {
+    Node src;
+    Node dst;
 };
 
-class City : public Graph {};
+typedef std::pair<int, Connection> Edge;
 
-int main() {
+bool comparePtrToWeight(Edge& a, Edge& b)
+{
+    return (a.first < b.first);
+}
 
-    City deneme;
+class Graph {
+private:
+    std::set<Node> nodes;
+    std::vector<Edge> graph;
+    std::map<Node, Node> tree;
+public:
+    const Node& addNode(Node& node);
+    Node& findNode(Node& node);
+    void addEdge(Edge& edge);
+    std::pair<std::vector<Edge>, int> MST();
+};
 
-    string line;
-    string line_param;
-    vector<string> line_parse;
-    //stringstream weight_converter;
-    string weight_converter;
+const Node& Graph::addNode(Node& node)
+{
+    std::pair<std::set<Node>::iterator, bool> insert_result = nodes.insert(node);
+    const Node& result = *insert_result.first;
+    this->tree.insert(std::pair<Node, Node>(node, node));
+    return result;
+}
 
-    ifstream city_plan("city_plan.txt");
+Node& Graph::findNode(Node& node)
+{
+    if (node != this->tree[node])
+    {
+        this->tree[node] = findNode(this->tree[node]);
+    }
+    return this->tree[node];
+}
 
-    if (city_plan.is_open()) { // Sanity check
-        // Parsing file into graph
-        while (getline(city_plan, line)) {
-            line_parse.clear();
+void Graph::addEdge(Edge& edge)
+{
+    addNode(edge.second.src);
+    addNode(edge.second.dst);
 
-            istringstream parsing_line(line);
-            while (getline(parsing_line, line_param, ',')) {
-                line_parse.push_back(line_param);
+    this->graph.push_back(edge);
+}
+
+
+std::pair<std::vector<Edge>, int> Graph::MST()
+{
+    std::vector<Edge> min_spanning_tree;
+    int total_cost = 0;
+
+    // Sort the edges of the graph.
+    std::sort(this->graph.begin(), this->graph.end(), comparePtrToWeight);
+
+    std::vector<Edge>::iterator it;
+    // Constrain 2 and 5
+    for (it = graph.begin(); it != graph.end(); ++it)
+    {
+        Node start_node = it->second.src;
+        Node end_node = it->second.dst;
+
+        Node& src = findNode(start_node);
+        Node& dst = findNode(end_node);
+
+        if ("GP" == src && "Hipp" == dst)
+        {
+            src = findNode(src);
+            dst = findNode(dst);
+            tree[dst] = src;
+
+            Connection e = { src, dst };
+            min_spanning_tree.push_back(std::make_pair(it->first, e));
+            total_cost += it->first;
+            break;
+        }
+    }
+
+    // Constrain 3 and 4
+    for (it = graph.begin(); it != graph.end(); ++it)
+    {
+        Node start_node = it->second.src;
+        Node end_node = it->second.dst;
+
+        Node& src = findNode(start_node);
+        Node& dst = findNode(end_node);
+
+        if (("GP" == src && "Ch" == dst.substr(0, 2)) || ("GP" == dst && "Ch" == src.substr(0, 2)))
+        {
+            src = findNode(src);
+            dst = findNode(dst);
+            tree[dst] = src;
+
+            Connection e = { src, dst };
+            min_spanning_tree.push_back(std::make_pair(it->first, e));
+            total_cost += it->first;
+            break;
+        }
+    }
+
+    for (it = graph.begin(); it != graph.end(); ++it)
+    {
+        Node start_node = it->second.src;
+        Node end_node = it->second.dst;
+
+        Node& src = findNode(start_node);
+        Node& dst = findNode(end_node);
+
+        if ("Hp" == src.substr(0, 2) && "Hp" == dst.substr(0, 2)) // Constrain 7
+        {
+            continue;
+        }
+        else if (("Hipp" == src && "Bas" == dst.substr(0, 3)) || ("Bas" == src.substr(0, 3) && "Hipp" == dst)) // Constrain 6
+        {
+            continue;
+        }
+        else
+        {
+            src = findNode(src);
+            dst = findNode(dst);
+            tree[dst] = src;
+
+            Connection e = { src, dst };
+            min_spanning_tree.push_back(std::make_pair(it->first, e));
+            total_cost += it->first;
+            break;
+        }
+    }
+
+    sort(min_spanning_tree.begin(), min_spanning_tree.end(), comparePtrToWeight);
+
+    return std::pair<std::vector<Edge>, int>(min_spanning_tree, total_cost);
+}
+
+int main()
+{
+    // Create an empty graph.
+    Graph g;
+
+    // Read from file
+    std::string file_name;
+    std::string line;
+    std::string str;
+    std::vector<std::string> params;
+
+    std::cin >> file_name;
+    std::ifstream city_plan(file_name);
+
+    // Fill the graph.
+    if (city_plan.is_open())
+    {
+        while (std::getline(city_plan, line))
+        {
+            params.clear();
+            std::istringstream parser(line);
+            while (getline(parser, str, ','))
+            {
+                params.push_back(str);
             }
-
-            if (3 == line_parse.size()) { // Sanity check
-                // weight_converter << line_parse[2];
-
-                weight_converter = line_parse[2];
-                int weight = std::stoi(weight_converter);
-                deneme.add_edge(line_parse[0], line_parse[1], weight);
-
-                /*int weight = 0;
-                weight_converter >> weight;
-                deneme.add_edge(line_parse[0], line_parse[1], weight);*/
+            if (3 == params.size())
+            {
+                Connection c = { params[0], params[1] };
+                std::pair<int, Connection> e = std::make_pair(std::stoi(params[2]), c);
+                g.addEdge(e);
             }
         }
-
         city_plan.close();
     }
 
-    deneme.mst();
+    // Run the Minimum Spanning Tree algorithm.
+    std::pair<std::vector<Edge>, int> min_spanning_tree = g.MST();
+
+    // Print edges
+    for (Edge& e : min_spanning_tree.first)
+    {
+        std::cout << e.second.src << " " << e.second.dst << " " << e.first << std::endl;
+    }
+
+    // Print total cost
+    std::cout << min_spanning_tree.second << std::endl;
 
     return 0;
 }
