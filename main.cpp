@@ -112,6 +112,7 @@ std::pair<std::vector<Edge>, int> Graph::MST()
         }
     }
 
+    // Spanning
     for (it = graph.begin(); it != graph.end(); ++it)
     {
         Node start_node = it->second.src;
