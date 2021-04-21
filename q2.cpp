@@ -141,7 +141,7 @@ void Graph::dijkstra()
     }
   
     printPath(parent, this->nodes.size() - 1);
-    std::cout << dist[this->nodes.size() - 1];
+    std::cout << dist[this->nodes.size() - 1] << std::endl;
 }
 
 int main()
