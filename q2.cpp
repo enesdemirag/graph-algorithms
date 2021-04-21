@@ -10,63 +10,62 @@
 #include <set>
 #include <tuple>
 
+typedef std::string Node;
 typedef std::tuple<int, std::string, std::string> Edge;
 
 class Graph {
+private:
+    std::vector<Node> nodes;
+    std::vector<Edge> edges;
 public:
-    Graph(int node_number);
-    std::vector<std::string> nodes;
-    std::vector<Edge*> edges;
-    void addEdge(Edge* edge);
-    int adj_matrix[][];
-    void fillMatrix();
+    int** adj_matrix;
+    void addEdge(Edge& edge);
+    void createAdjacencyMatrix();
 };
 
-Graph::Graph(int node_number)
+void Graph::addEdge(Edge& edge)
 {
-    adj_matrix = new int[node_number][node_number];
+    this->edges.push_back(edge);
+
+    Node begin_node = std::get<1>(edge);
+    Node end_node = std::get<2>(edge);
+
+    // Only the unique nodes shoud be added.
+	if (std::find(this->nodes.begin(), this->nodes.end(), begin_node) == this->nodes.end())
+	{
+        this->nodes.push_back(begin_node);
+	}
+	if (std::find(this->nodes.begin(), this->nodes.end(), end_node) == this->nodes.end())
+	{
+        this->nodes.push_back(end_node);
+	}
 }
 
-void Graph::addEdge(Edge* edge)
+void Graph::createAdjacencyMatrix()
 {
-    edges.push_back(edge);
-
-    if (std::find(nodes.begin(), nodes.end(), std::get<1>(*edge)) == nodes.end())
-    {
-        nodes.push_back(std::get<1>(*edge));
-    }
-    if (std::find(nodes.begin(), nodes.end(), std::get<2>(*edge)) == nodes.end())
-    {
-        nodes.push_back(std::get<2>(*edge));
-    }
-}
-
-void Graph::fillMatrix()
-{
+    *adj_matrix = new int[nodes.size()];
+    
     for (int i = 0; i < nodes.size(); i++)
     {
-        for (int ii = 0; ii < nodes.size(); ii++)
+        for (Edge& e : this->edges)
         {
-            for (Edge* e : edges)
-            {
-                if (std::get<1>(*e) == nodes[i] && std::get<2>(*e) == nodes[ii] ||
-                    std::get<1>(*e) == nodes[ii] && std::get<2>(*e) == nodes[i])
-                {
-                    adj_matrix[i][ii] = std::get<0>(*e);
-                }
-                else
-                {
-                    adj_matrix[i][ii] = 0;
-                }
-            }
+            int cost = std::get<0>(e);
+            Node begin_node = std::get<1>(e);
+            Node end_node = std::get<2>(e);
 
+            if (begin_node == nodes[i])
+            {
+                // Find the other node's index.
+                uint j = std::distance(this->nodes.begin(), std::find(this->nodes.begin(), this->nodes.end(), end_node));
+                adj_matrix[i][j] = cost;
+                adj_matrix[j][i] = cost;
+            }
         }
     }
 }
 
 int main()
 {
-
     // Create an empty graph.
     Graph g;
 
@@ -76,8 +75,8 @@ int main()
     std::string str;
     std::vector<std::string> params;
 
-    std::cin >> file_name;
-    std::ifstream city_plan(file_name);
+    //std::cin >> file_name;
+    std::ifstream city_plan("path_info_1.txt");
 
     // Fill the graph.
     if (city_plan.is_open())
@@ -92,15 +91,22 @@ int main()
             }
             if (3 == params.size())
             {
-                Edge* e = new Edge(std::stoi(params[2]), params[0], params[1]);
+                Edge e(std::stoi(params[2]), params[0], params[1]);
                 g.addEdge(e);
             }
         }
         city_plan.close();
     }
 
+    g.createAdjacencyMatrix();
 
-    g.fillMatrix();
-
+    for (int i = 0; i < 12; i++)
+    {
+        for (int j = 0; j < 12; j++)
+        {
+            std::cout << g.adj_matrix[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
     return 0;
 }
