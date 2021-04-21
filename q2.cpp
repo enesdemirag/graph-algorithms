@@ -43,9 +43,17 @@ void Graph::addEdge(Edge& edge)
 
 void Graph::createAdjacencyMatrix()
 {
+    // Initialize the matrix, allocate memory and set initial values.
     *adj_matrix = new int[nodes.size()];
-    
-    for (int i = 0; i < nodes.size(); i++)
+    for (uint x = 0; x < nodes.size(); x++)
+    {
+        adj_matrix[x] = new int[nodes.size()];
+        std::fill_n(adj_matrix[x], nodes.size(), 9999);
+    }
+
+
+    // Put cost values
+    for (uint i = 0; i < nodes.size(); i++)
     {
         for (Edge& e : this->edges)
         {
@@ -53,9 +61,14 @@ void Graph::createAdjacencyMatrix()
             Node begin_node = std::get<1>(e);
             Node end_node = std::get<2>(e);
 
-            if (begin_node == nodes[i])
+            // Enemy constrain
+            if ("E" == begin_node.substr(0, 1) || "E" == end_node.substr(0, 1))
             {
-                // Find the other node's index.
+                continue;
+            }
+            else if (begin_node == nodes[i])
+            {
+                // Find the end node's index.
                 uint j = std::distance(this->nodes.begin(), std::find(this->nodes.begin(), this->nodes.end(), end_node));
                 adj_matrix[i][j] = cost;
                 adj_matrix[j][i] = cost;
