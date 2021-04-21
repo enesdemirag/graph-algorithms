@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <climits>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -14,9 +15,9 @@ typedef std::tuple<int, std::string, std::string> Edge;
 
 class Graph {
 private:
-    std::vector<Node> nodes;
     std::vector<Edge> edges;
 public:
+    std::vector<Node> nodes;
     int** adj_matrix;
     void addEdge(Edge& edge);
     void createAdjacencyMatrix();
@@ -77,50 +78,37 @@ void Graph::createAdjacencyMatrix()
 using namespace std;
 int V = 12;
 
-int minDistance(int dist[], bool sptSet[])
+int minDistance(int distances[], bool visited[])
 {
     // Initialize min value
-    int min = INT_MAX, min_index;
+    int min = INT_MAX;
+    int min_index = 0;
   
     for (int v = 0; v < V; v++)
-        if (sptSet[v] == false && dist[v] <= min)
-            min = dist[v], min_index = v;
-  
+    {
+        if (visited[v] == false && distances[v] <= min)
+        {
+             min = distances[v], min_index = v;
+        }
+    }
     return min_index;
 }
-  
-// Function to print shortest
-// path from source to j
-// using parent array
-void printPath(int parent[], int j)
+
+std::vector<Node> global_nodes;
+
+void printPath(int parent[], int node_index)
 {
-    // Base Case : If j is source
-    if (parent[j] == - 1)
-        return;
-  
-    printPath(parent, parent[j]);
-  
-    printf("%d ", j);
-}
-  
-// A utility function to print 
-// the constructed distance
-// array
-void printSolution(int dist[], int n, int parent[])
-{
-    int src = 0;
-    printf("Vertex\t Distance\tPath");
-    for (int i = 1; i < V; i++)
+    // If start node reached.
+    if (parent[node_index] == - 1)
     {
-        printf("\n%d -> %d \t\t %d\t\t%d ", src, i, dist[i], src);
-        printPath(parent, i);
+        cout << global_nodes[node_index] << " ";
+        return;
     }
+  
+    printPath(parent, parent[node_index]);
+    cout << global_nodes[node_index] << " ";
 }
   
-// Funtion that implements Dijkstra's
-// single source shortest path
-// algorithm for a graph represented
-// using adjacency matrix representation
 void dijkstra(int** graph, int src)
 {
       
@@ -189,7 +177,8 @@ void dijkstra(int** graph, int src)
   
     // print the constructed
     // distance array
-    printSolution(dist, V, parent);
+    printPath(parent, V - 1);
+    cout << dist[V - 1];
 }
 
 int main()
@@ -228,15 +217,7 @@ int main()
 
     g.createAdjacencyMatrix();
 
-    for (int i = 0; i < 12; i++)
-    {
-        for (int j = 0; j < 12; j++)
-        {
-            std::cout << g.adj_matrix[i][j] << " ";
-        }
-        std::cout << "\n";
-    }
-
+    global_nodes = g.nodes;
     dijkstra(g.adj_matrix, 0);
 
     return 0;
