@@ -50,20 +50,19 @@ Solution Graph::MST()
 {
     std::vector<Edge> min_spanning_tree;
     int total_cost = 0;
-    std::vector<Edge>::iterator it;
 
     // Sort the edges of the graph.
     std::sort(this->edges.begin(), this->edges.end());
     
     // Constrain 2 and 5
-    for (it = this->edges.begin(); it != this->edges.end(); it++)
+    for (Edge& e : this->edges)
     {
-        Node begin_node = it->second.first;
-        Node end_node = it->second.second;
+        Node begin_node = e.second.first;
+        Node end_node = e.second.second;
 
         Node src = findNode(begin_node);
         Node dst = findNode(end_node);
-        int cost = it->first;
+        int cost = e.first;
 
         if ("GP" == begin_node && "Hipp" == end_node)
         {
@@ -78,14 +77,14 @@ Solution Graph::MST()
     }
 
     // Constrain 3 and 4
-    for (it = this->edges.begin(); it != this->edges.end(); it++)
+    for (Edge& e : this->edges)
     {
-        Node begin_node = it->second.first;
-        Node end_node = it->second.second;
+        Node begin_node = e.second.first;
+        Node end_node = e.second.second;
 
         Node src = findNode(begin_node);
         Node dst = findNode(end_node);
-        int cost = it->first;
+        int cost = e.first;
 
         if (("GP" == begin_node && "Ch" == end_node.substr(0, 2)) || ("GP" == end_node && "Ch" == begin_node.substr(0, 2)))
         {
@@ -100,14 +99,14 @@ Solution Graph::MST()
     }
 
     // Spanning
-    for (it = this->edges.begin(); it != this->edges.end(); it++)
+    for (Edge& e : this->edges)
     {
-        Node begin_node = it->second.first;
-        Node end_node = it->second.second;
+        Node begin_node = e.second.first;
+        Node end_node = e.second.second;
 
         Node src = findNode(begin_node);
         Node dst = findNode(end_node);
-        int cost = it->first;
+        int cost = e.first;
 
         if ("Hp" == begin_node.substr(0, 2) && "Hp" == end_node.substr(0, 2)) // Constrain 7
         {
