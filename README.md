@@ -48,7 +48,6 @@ For any necessary information about this project first read the [assignment](ass
 >> city_plan_1.txt
 ```
 
-
 All of the standard libraries used in this project is given below.
 
 ```
@@ -64,6 +63,12 @@ All of the standard libraries used in this project is given below.
 
 I explained my decisions and way of thinking in depth via inline documentation and comments inside this project. You can also test these programs using [calico tool](https://github.com/itublg/calico) with given [q1.t](q1.t) and [q2.t](q2.t) scripts.
 
+In order to use calico, you should install it from pip and run the given .t files. Calico will automatically test the programs with different cases.
+
+```
+>> pip install calico
+>> calico q1.t 
+```
 
 ## shortest-path
 
