@@ -133,8 +133,33 @@ void Graph::dijkstra()
   
         for (uint v = 0; v < this->nodes.size(); v++)
   
+            // Visited degilse ve ulasim varsa ve 
             if (!sptSet[v] && this->adj_matrix[u][v] && dist[u] + this->adj_matrix[u][v] < dist[v])
             {
+                if (this->nodes[u].substr(0, 1) == "E")
+                {
+                    continue;
+                }
+
+                bool smaller_than_5 = false;
+                for (Edge e : this->edges)
+                {
+                    if ((std::get<1>(e) == nodes[v] && std::get<2>(e).substr(0, 1) == "E") || (std::get<2>(e) == nodes[v] && std::get<1>(e).substr(0, 1) == "E"))
+                    {
+                        int cost = std::get<0>(e);
+                        if (cost < 5)
+                        {
+                            smaller_than_5 = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (smaller_than_5)
+                {
+                    continue;
+                }
+                
                 parent[v] = u;
                 dist[v] = dist[u] + this->adj_matrix[u][v];
             } 
@@ -179,6 +204,15 @@ int main()
     }
 
     g.createAdjacencyMatrix();
+
+    for (int i = 0; i < 12; i++)
+    {
+        for (int j = 0; j < 12; j++)
+        {
+            std::cout << g.adj_matrix[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
 
     g.dijkstra();
 
