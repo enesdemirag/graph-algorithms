@@ -4,7 +4,7 @@ Student Name: Enes Demirag<br>
 Student ID  : 504201571<br>
 Mail        : ensdmrg@gmail.com<br>
 
-If you encounter any problem regarding this projects, feel free to reach me.
+These are my **Analysis of Algorithms II** Course Assignments. Breadth-First Search, Depth-First Search, Kruskal's Minimum Spanning Tree, Dijkstra's Shortest Path algorithms. If you encounter any problem regarding this projects, feel free to reach me.
 
 Sincerely, Enes.
 
